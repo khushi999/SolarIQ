@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import os
 
 # === Step 1: Load the raw sample dataset ===
-RAW_DATA_PATH = "data/raw/uk_pv_sample.csv"
+RAW_DATA_PATH = "data/raw/uk_pv_full.csv"
 df = pd.read_csv(RAW_DATA_PATH)
 df['datetime'] = pd.to_datetime(df['datetime'])
 

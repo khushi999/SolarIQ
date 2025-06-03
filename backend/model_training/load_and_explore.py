@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # Load first 1000 rows only (safe for RAM)
-dataset = load_dataset("openclimatefix/uk_pv", split="train[:1000]")
+dataset = load_dataset("openclimatefix/uk_pv", split="train")
 df = pd.DataFrame(dataset)
 
 # Rename and convert datetime
@@ -22,4 +22,4 @@ plt.tight_layout()
 plt.show()
 
 # Save sample to CSV
-df.to_csv("data/raw/uk_pv_sample.csv", index=False)
+df.to_csv("data/raw/uk_pv_full.csv", index=False)
