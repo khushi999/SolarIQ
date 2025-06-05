@@ -14,6 +14,7 @@ SolarIQ/
 ├── README.md
 └── .gitignore
 ```
+---
 
 ```
 Project Structure Update for LSTM Training
@@ -29,3 +30,13 @@ backend/
 │   ├── train.py             → For training logic, loss, optimizer, and validation
 │   └── train_lstm_model.py  → Main entry file to call all above modules
 ```
+---
+
+ML Concepts Covered So Far
+Sequence modeling using sliding window logic
+Multivariate time series: using more than 1 feature (irradiance, temp, humidity)
+Why we predict only irradiance: used for energy calculations later
+Train-validation split: to evaluate model generalization
+PyTorch Dataset/DataLoader: for efficient batching and shuffling
+
+---
