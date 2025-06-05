@@ -7,15 +7,16 @@ df = pd.read_csv('data/processed/clean_nasa.csv')
 SEQUENCE_LENGTH = 7  # (7 days to predict next)
 
 # Extract the irradiance column (as a NumPy array)
-irradiance_values = df['solar_irradiance_scaled'].values
+features = df[['solar_irradiance_scaled', 'temperature_scaled', 'humidity_scaled']].values
 
 # Create empty lists for input sequences and targets
 x, y = [], []
 
 # Loop through the irradiance values to create sequences
-for i in range(len(irradiance_values) - SEQUENCE_LENGTH):
-    x_seq = irradiance_values[i:i+SEQUENCE_LENGTH]
-    y_target = irradiance_values[i + SEQUENCE_LENGTH]
+for i in range(len(features) - SEQUENCE_LENGTH):    # This loop goes from i=0 to len(features)-7, so you don't go out of bounds. 
+    
+    x_seq = features[i:i+SEQUENCE_LENGTH]
+    y_target = features[i + SEQUENCE_LENGTH][0]   # this is the target the model should learn to predict (8th value in the array)
     x.append(x_seq)
     y.append(y_target)
 
