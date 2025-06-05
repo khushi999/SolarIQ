@@ -46,6 +46,7 @@ A snapshot of normalized solar irradiance from NASA POWER API for the past year:
 
 ### 📁 Project Structure
 
+```
 SolarIQ/
 ├── backend/
 │   ├── data/
@@ -63,6 +64,7 @@ SolarIQ/
 │   └── solar_irradiance_plot.png
 ├── requirements.txt
 └── README.md
+```
 
 ---
 
