@@ -1,84 +1,92 @@
 ### 🌞 SolarIQ — ML-Powered Solar Forecasting App
 
-> Forecast solar energy generation and estimate daily savings using machine learning.
+> Forecast daily solar energy generation for your location using weather data from NASA and machine learning.
 
 ---
 
 ### 📌 About the Project
 
-SolarIQ is a climate tech product that uses real solar energy data and time series modeling to:
+**SolarIQ** is a climate tech product that uses global weather data and time series modeling to:
 
 * Predict next-day solar power output
-* Estimate cost savings based on system size and electricity rates
-* Provide an easy-to-use interface for eco-conscious individuals, solar agents, or schools
+* Estimate cost savings based on system size and electricity rates *(coming soon)*
+* Provide an easy-to-use interface for homeowners, solar agents, students, and researchers
+
+Originally based on Open Climate Fix's UK dataset, the project **pivoted to NASA POWER API** to allow **location-based, real-time forecasts** globally.
 
 ---
 
 ### 🔍 How It Works
 
-1. **Data**
-   Uses real-world solar data from [Open Climate Fix’s UK PV dataset](https://huggingface.co/datasets/openclimatefix/uk_pv)
+1. **Location Detection**
+   - Detects user location using IP (via ipinfo.io)
 
-2. **Processing**
+2. **Data**
+   - Fetches solar irradiance, temperature, and humidity using [NASA POWER API](https://power.larc.nasa.gov/)
 
-   * Cleans and resamples data to daily totals
-   * Scales generation between 0 and 1
-   * Creates 7-day input sequences for prediction
+3. **Processing**
+   - Cleans and scales the data
+   - Creates 7-day rolling input sequences for prediction
 
-3. **Modeling**
+4. **Modeling**
+   - (Coming soon) Train an LSTM-based time series model
 
-   * Will use an LSTM-based time series model (coming soon!)
+5. **UI**
+   - (Coming soon) Streamlit interface where users input location/system size and get a forecast & savings estimate
 
-4. **UI**
+---
 
-   * Streamlit frontend (coming soon) where users input their system size and see forecast + savings
+### 📊 Sample Output
+
+A snapshot of normalized solar irradiance from NASA POWER API for the past year:
+
+![Solar Irradiance Plot](assets/solar_irradiance_plot.png)
 
 ---
 
 ### 📁 Project Structure
 
-```
 SolarIQ/
 ├── backend/
+│   ├── data/
+│   │   ├── fetch_nasa_power.py
+│   │   └── location_utils.py
 │   └── model_training/
-│       ├── load_and_explore.py
-│       ├── clean_and_prepare.py
+│       ├── clean_nasa_data.py
 │       └── create_sequences.py
 ├── data/
-│   ├── raw/
-│   └── processed/
+│   ├── raw/              # Unprocessed NASA data
+│   └── processed/        # Cleaned & scaled CSVs
 ├── frontend/
-│   └── streamlit_app.py (WIP)
+│   └── streamlit_app.py  # WIP UI for user interaction
+├── assets/
+│   └── solar_irradiance_plot.png
 ├── requirements.txt
 └── README.md
-```
-
----
-
-### 📅 Timeline
-
-| Week   | Focus                                 |
-| ------ | ------------------------------------- |
-| Week 1 | Data setup, loading, and exploration  |
-| Week 2 | Preprocessing and sequence generation |
-| Week 3 | Model training + evaluation           |
-| Week 4 | Streamlit UI                          |
-| Week 5 | Testing + deployment                  |
 
 ---
 
 ### 🛠️ Tech Stack
 
-* Python, Pandas, NumPy, scikit-learn, PyTorch
-* Hugging Face Datasets
-* Streamlit (for frontend)
-* GitHub + VS Code
+* Python, Pandas, NumPy, scikit-learn
+* NASA POWER API, ipinfo.io (for geolocation)
+* PyTorch (planned for LSTM)
+* Streamlit (frontend - WIP)
+* GitHub, VS Code
 
 ---
 
-### 💡 Future Additions
+### 💡 Future Features
 
-* Weather data integration (NASA POWER / OpenWeatherMap)
-* Real-time location-based solar predictions
-* Energy savings calculator by $/kWh
-* Report export (PDF/CSV)
+* Real-time solar forecast from any global location
+* Dollar savings calculator based on $/kWh
+* PDF or CSV energy reports
+* Live weather + satellite image integration
+
+---
+
+### 🙋‍♀️ Built by
+
+**Khushi Jain** — Computer Science grad & climate tech enthusiast ☀️
+
+---
