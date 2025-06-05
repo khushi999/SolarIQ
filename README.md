@@ -44,6 +44,21 @@ A snapshot of normalized solar irradiance from NASA POWER API for the past year:
 
 ---
 
+### 🧠 Sequence Generation (Sliding Window)
+To prepare data for the LSTM model, SolarIQ uses a sliding window approach:
+
+We take sequences of 7 days of past solar irradiance to predict the irradiance of the next (8th) day.
+```
+Example:
+Input (X):  [Day 1, Day 2, ..., Day 7]
+Target (y): Day 8
+This method allows the model to learn from historical trends and patterns.
+```
+![Sequence Diagram](assets/sequence_diagram.png)
+✅ We generated 358 such sequences from the cleaned NASA POWER dataset.
+
+---
+
 ### 📁 Project Structure
 
 ```
