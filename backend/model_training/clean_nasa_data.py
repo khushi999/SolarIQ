@@ -37,7 +37,7 @@ plt.tight_layout()
 plt.show()
 
 
-PROCESSED_DATA_PATH = 'data/processed.clea_nasa.csv'
+PROCESSED_DATA_PATH = 'data/processed/clean_nasa.csv'
 df.to_csv(PROCESSED_DATA_PATH, index=False) 
 # index = False is written so that the row index (0,1,2,3,4..) of the new columns are not added to the og df 
 
