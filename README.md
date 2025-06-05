@@ -55,7 +55,7 @@ Target (y): Day 8
 This method allows the model to learn from historical trends and patterns.
 ```
 ![Sequence Diagram](assets/sequence_diagram.png)
-✅ We generated 358 such sequences from the cleaned NASA POWER dataset.
+✅ Generated 358 such sequences from the cleaned NASA POWER dataset.
 
 ---
 
