@@ -26,7 +26,8 @@ with torch.no_grad():
 
 
 # Compute RMSE between predictions and actual y_val
-rmse = mean_squared_error(y_val, predictions, squared=False)
+mse = mean_squared_error(y_val, predictions)
+rmse = np.sqrt(mse)
 print(f"Validation RMSE: {rmse:.4f}")
 
 # graph 

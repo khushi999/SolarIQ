@@ -15,7 +15,7 @@ train_loader, val_loader = get_dataloaders(x_train, y_train, x_val, y_val, batch
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # initialise model, loss, optimizer
-model = SolarLSTM(input_size=3, hidden_size=64, num_layers=64).to(device)
+model = SolarLSTM(input_size=3, hidden_size=64, num_layers=2).to(device)
 criterion = nn.MSELoss()
 optimizer = optim.Adam(model.parameters(), lr=0.001)
 
