@@ -56,7 +56,7 @@ for epoch in range(num_epochs):
 np.save('data/processed/x_val.npy', x_val)
 np.save('data/processed/y_val.npy', y_val)
 
-
+torch.save(model.state_dict(), 'models/solar_lstm.pth')
 
 # What This Output Means:
 # Each line printed shows the training loss and validation loss for one epoch (i.e., one pass through the full dataset). 

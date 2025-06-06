@@ -12,7 +12,7 @@ y_val = np.load('data/processed/y_val.npy')
 # Load the trained model
 #    - Initialize model and load model weights from 'solar_lstm.pth'
 model = SolarLSTM(input_size=3, hidden_size=64, num_layers=2)
-model.load_state_dict(torch.load('model/solar_lstm.pth'))
+model.load_state_dict(torch.load('models/solar_lstm.pth'))
 model.eval()
 
 # Convert x_val to torch tensor
