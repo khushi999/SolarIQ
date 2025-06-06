@@ -23,7 +23,7 @@ def get_dataloaders(x_train, y_train, x_val, y_val, batch_size=32):   #batch_siz
     val_dataset = SolarDataset(x_val, y_val)
     
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)   # - train_loader: shuffle=True for randomness
-    val_loader = Dataset(val_dataset, batch_size=batch_size, shuffle=False)         # - val_loader: shuffle=False to preserve sequence
+    val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)         # - val_loader: shuffle=False to preserve sequence
     
     return train_loader, val_loader
 
