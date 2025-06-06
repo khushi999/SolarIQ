@@ -12,14 +12,14 @@
 # │   └── train_lstm_model.py  → Main entry file to call all above modules
 
 
-from load_data import load_sequences
-from dataset import get_dataloaders
+# from load_data import load_sequences
+# from dataset import get_dataloaders
 
-# Step 1: Load sequences
-x_train, y_train, x_val, y_val = load_sequences()
-print("Train shape:", x_train.shape, y_train.shape)
-print("Val shape:", x_val.shape, y_val.shape)
+# # Step 1: Load sequences
+# x_train, y_train, x_val, y_val = load_sequences()
+# print("Train shape:", x_train.shape, y_train.shape)
+# print("Val shape:", x_val.shape, y_val.shape)
 
-# Step 2: Get DataLoaders
-train_loader, val_loader = get_dataloaders(x_train, y_train, x_val, y_val)
-print("Loaded DataLoaders.")
+# # Step 2: Get DataLoaders
+# train_loader, val_loader = get_dataloaders(x_train, y_train, x_val, y_val)
+# print("Loaded DataLoaders.")

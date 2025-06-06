@@ -59,6 +59,22 @@ This method allows the model to learn from historical trends and patterns.
 
 ---
 
+## 📊 Model Performance Visualization
+
+The following graph shows the **predicted vs actual normalized solar irradiance** on the validation dataset:
+
+![Predicted vs Actual Irradiance](assets/inference_plot.png)
+
+This plot illustrates how well the trained LSTM model is able to capture patterns in solar irradiance based on features such as temperature, humidity, and past irradiance values.
+
+### 🔍 RMSE (Root Mean Squared Error)
+
+- **Validation RMSE**: `0.1252`
+
+The RMSE score measures the average prediction error between actual and predicted irradiance values. A lower RMSE indicates better performance — and 0.1252 suggests our model is fairly accurate on unseen data.
+
+---
+
 ### 📁 Project Structure
 
 ```
