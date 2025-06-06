@@ -50,3 +50,19 @@ for epoch in range(num_epochs):
     
     
     print(f"Epoch {epoch+1}/{num_epochs} - Train Loss: {train_loss/len(train_loader):.4f}, Val Loss: {val_loss/len(val_loader):.4f}")
+    
+    
+# Save validation sets for use in inference.py
+np.save('data/processed/x_val.npy', x_val)
+np.save('data/processed/y_val.npy', y_val)
+
+
+
+# What This Output Means:
+# Each line printed shows the training loss and validation loss for one epoch (i.e., one pass through the full dataset). 
+# Here's how to interpret the numbers:
+# Training Loss is the error on the training data. It starts high (~0.19) and quickly drops and stabilizes around 0.066, 
+# which is great — it means your model is learning the patterns in the training set.
+# Validation Loss tells you how well the model generalizes to unseen data. It fluctuates a bit (between ~0.06 and ~0.18), which is okay for now.
+# No overfitting signs yet, but fluctuations in validation loss suggest there's some variance, 
+# and maybe room to optimize (e.g., tuning model size, using dropout, or early stopping).
