@@ -1,6 +1,6 @@
 import logging
 import numpy as np
-from sklearn.metrics import root_mean_squared_error
+from sklearn.metrics import root_mean_squared_error, mean_absolute_error
 import matplotlib.pyplot as plt
 import os
 
@@ -24,6 +24,10 @@ logger = get_logger()
 def compute_rmse(y_true, y_pred):
     """Compute Root Mean Squared Error (RMSE)"""
     return root_mean_squared_error(y_true, y_pred, squared=False)
+
+def compute_mae(y_true, y_pred):
+    """Compute Mean Absolute Error (MAE)"""
+    return mean_absolute_error(y_true, y_pred)
 
 def plot_predictions(y_true, y_pred, save_path='assets/inference_plot.png'):
     """Plot predicted vs actual irradiance and save the plot"""
