@@ -74,6 +74,8 @@ The following graph shows the **predicted vs actual normalized solar irradiance*
 
 This plot illustrates how well the trained LSTM model is able to capture patterns in solar irradiance based on features such as temperature, humidity, and past irradiance values.
 
+---
+
 ### RMSE (Root Mean Squared Error)
 
 - **Validation RMSE**: `0.1252`
