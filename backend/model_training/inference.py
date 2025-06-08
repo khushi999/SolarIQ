@@ -1,44 +1,66 @@
 import torch
 import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.metrics import mean_squared_error
+import logging
+import argparse
+import pandas as pd
 from model import SolarLSTM
+from backend.model_training.utils import compute_rmse, compute_mae, plot_predictions
+from config import (
+    INPUT_SIZE,
+    HIDDEN_SIZE,
+    NUM_LAYERS,
+    MODEL_SAVE_PATH,
+    X_VAL_PATH,
+    Y_VAL_PATH,
+    INFERENCE_PLOT_PATH
+)
 
-# Load x_val and y_val arrays from npy files
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s"
+)
 
-x_val = np.load('data/processed/x_val.npy')
-y_val = np.load('data/processed/y_val.npy')
+def run_inference(export_csv=False, disable_plot=False):
+    logging.info("Loading validation data...")
+    x_val = np.load(X_VAL_PATH)
+    y_val = np.load(Y_VAL_PATH)
 
-# Load the trained model
-#    - Initialize model and load model weights from 'solar_lstm.pth'
-model = SolarLSTM(input_size=3, hidden_size=64, num_layers=2)
-model.load_state_dict(torch.load('models/solar_lstm.pth'))
-model.eval()
+    logging.info("Initializing model...")
+    model = SolarLSTM(input_size=INPUT_SIZE, hidden_size=HIDDEN_SIZE, num_layers=NUM_LAYERS)
+    model.load_state_dict(torch.load(MODEL_SAVE_PATH))
+    model.eval()
 
-# Convert x_val to torch tensor
-x_val_tensor = torch.tensor(x_val, dtype=torch.float32)
+    x_val_tensor = torch.tensor(x_val, dtype=torch.float32)
 
-# Disable gradient computation (torch.no_grad())
-#    - forward pass through the model on x_val
-#    - Output shape: predicted values of shape (num_samples,)
-with torch.no_grad():
-    predictions = model(x_val_tensor).squeeze().numpy()
+    logging.info("Running inference...")
+    with torch.no_grad():
+        predictions = model(x_val_tensor).squeeze().numpy()
+
+    # Evaluation
+    rmse = compute_rmse(y_val, predictions)
+    mae = compute_mae(y_val, predictions)
+    logging.info(f"Validation RMSE: {rmse:.4f}")
+    logging.info(f"Validation MAE: {mae:.4f}")
+
+    # Plotting
+    if not disable_plot:
+        plot_predictions(y_val, predictions, save_path=INFERENCE_PLOT_PATH)
+
+    # Export predictions to CSV
+    if export_csv:
+        df = pd.DataFrame({
+            'Actual': y_val,
+            'Predicted': predictions
+        })
+        df.to_csv('assets/predictions.csv', index=False)
+        logging.info("Predictions exported to assets/predictions.csv")
 
 
-# Compute RMSE between predictions and actual y_val
-mse = mean_squared_error(y_val, predictions)
-rmse = np.sqrt(mse)
-print(f"Validation RMSE: {rmse:.4f}")
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Run inference on validation set.")
+    parser.add_argument("--export_csv", action="store_true", help="Export predictions to CSV")
+    parser.add_argument("--disable_plot", action="store_true", help="Disable plot display and saving")
+    args = parser.parse_args()
 
-# graph 
-plt.figure(figsize=(12,5))
-plt.plot(predictions, label='Predicted', linestyle='--')
-plt.plot(y_val, label='Actual', alpha=0.7)
-plt.title('Predicted vs Actual Solar Irradiance (Validation Set)')
-plt.xlabel('Time Step')
-plt.ylabel('Normalized Irradiance')
-plt.legend()
-plt.grid(True)
-plt.tight_layout()
-plt.savefig('assets/inference_plot.png')  # save plot for README
-plt.show()
+    run_inference(export_csv=args.export_csv, disable_plot=args.disable_plot)
