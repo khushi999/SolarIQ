@@ -9,7 +9,7 @@ from config import (
     HIDDEN_SIZE, NUM_LAYERS, BATCH_SIZE, LEARNING_RATE, EPOCHS,
     MODEL_SAVE_PATH, X_VAL_PATH, Y_VAL_PATH, EARLY_STOPPING_PATIENCE
 )
-from backend.model_training.utils import logger
+from utils import logger
 
 def train_model():
     # Load data

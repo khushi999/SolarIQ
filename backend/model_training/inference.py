@@ -4,7 +4,7 @@ import logging
 import argparse
 import pandas as pd
 from model import SolarLSTM
-from backend.model_training.utils import compute_rmse, compute_mae, plot_predictions
+from utils import compute_rmse, compute_mae, plot_predictions
 from config import (
     INPUT_SIZE,
     HIDDEN_SIZE,

@@ -4,7 +4,7 @@
 
 ---
 
-### 📌 About the Project
+### About the Project
 
 **SolarIQ** is a climate tech product that uses global weather data and time series modeling to:
 
@@ -16,7 +16,7 @@ Originally based on Open Climate Fix's UK dataset, the project **pivoted to NASA
 
 ---
 
-### 🔍 How It Works
+### How It Works
 
 1. **Location Detection**
    - Detects user location using IP (via ipinfo.io)
@@ -36,7 +36,7 @@ Originally based on Open Climate Fix's UK dataset, the project **pivoted to NASA
 
 ---
 
-### 📊 Sample Output
+### Sample Output
 
 A snapshot of normalized solar irradiance from NASA POWER API for the past year:
 
@@ -44,7 +44,7 @@ A snapshot of normalized solar irradiance from NASA POWER API for the past year:
 
 ---
 
-### 🧠 Sequence Generation (Sliding Window)
+### Sequence Generation (Sliding Window)
 To prepare data for the LSTM model, SolarIQ uses a sliding window approach:
 
 We take sequences of 7 days of past solar irradiance to predict the irradiance of the next (8th) day.
@@ -55,11 +55,18 @@ Target (y): Day 8
 This method allows the model to learn from historical trends and patterns.
 ```
 ![Sequence Diagram](assets/sequence_diagram.png)
-✅ Generated 358 such sequences from the cleaned NASA POWER dataset.
+Generated 358 such sequences from the cleaned NASA POWER dataset.
 
 ---
 
-## 📊 Model Performance Visualization
+## Modeling
+   - Trains a multi-feature LSTM model using PyTorch
+   - Uses past 7 days of solar irradiance, temperature, and humidity
+   - Predicts the 8th day's irradiance
+
+---
+
+## Model Performance Visualization
 
 The following graph shows the **predicted vs actual normalized solar irradiance** on the validation dataset:
 
@@ -67,15 +74,17 @@ The following graph shows the **predicted vs actual normalized solar irradiance*
 
 This plot illustrates how well the trained LSTM model is able to capture patterns in solar irradiance based on features such as temperature, humidity, and past irradiance values.
 
-### 🔍 RMSE (Root Mean Squared Error)
+### RMSE (Root Mean Squared Error)
 
 - **Validation RMSE**: `0.1252`
+- **Validation MAE**: `0.0996`
+- **Predictions Exported To**: [`assets/predictions.csv`](assets/predictions.csv)
 
 The RMSE score measures the average prediction error between actual and predicted irradiance values. A lower RMSE indicates better performance — and 0.1252 suggests our model is fairly accurate on unseen data.
 
 ---
 
-### 📁 Project Structure
+### Project Structure
 
 ```
 SolarIQ/
@@ -86,6 +95,12 @@ SolarIQ/
 │   └── model_training/
 │       ├── clean_nasa_data.py
 │       └── create_sequences.py
+│       └── dataset.py
+│       └── load_data.py
+│       └── model.py
+│       └── train_loop.py
+│       └── utils.py
+│       └── config.py
 ├── data/
 │   ├── raw/              # Unprocessed NASA data
 │   └── processed/        # Cleaned & scaled CSVs
@@ -93,13 +108,15 @@ SolarIQ/
 │   └── streamlit_app.py  # WIP UI for user interaction
 ├── assets/
 │   └── solar_irradiance_plot.png
+│   └── inference_plot.png
+│   └── predictions.csv
 ├── requirements.txt
 └── README.md
 ```
 
 ---
 
-### 🛠️ Tech Stack
+### Tech Stack
 
 * Python, Pandas, NumPy, scikit-learn
 * NASA POWER API, ipinfo.io (for geolocation)
@@ -109,7 +126,7 @@ SolarIQ/
 
 ---
 
-### 💡 Future Features
+### Future Features
 
 * Real-time solar forecast from any global location
 * Dollar savings calculator based on $/kWh
@@ -118,8 +135,8 @@ SolarIQ/
 
 ---
 
-### 🙋‍♀️ Built by
+### Built by
 
-**Khushi Jain** — Computer Science grad & climate tech enthusiast ☀️
+**Khushi Jain** — Computer Science grad & climate tech enthusiast
 
 ---
