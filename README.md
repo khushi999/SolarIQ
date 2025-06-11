@@ -139,6 +139,6 @@ SolarIQ/
 
 ### Built by
 
-**Khushi Jain** — Computer Science grad & climate tech enthusiast
+**Khushi Jain** — Climate tech enthusiast
 
 ---
