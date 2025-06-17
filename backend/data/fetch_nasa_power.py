@@ -5,7 +5,7 @@ import os
 def fetch_nasa_power_data(lat, lon, start_date, end_date, output_path="data/raw/nasa_power.csv"):
     """
     Fetches solar and weather data from NASA POWER API for a given location and date range.
-    
+
     Parameters:
         lat (float): Latitude of the location
         lon (float): Longitude of the location
@@ -45,10 +45,12 @@ def fetch_nasa_power_data(lat, lon, start_date, end_date, output_path="data/raw/
         os.makedirs(os.path.dirname(output_path), exist_ok=True)
         df.to_csv(output_path, index=False)
         print(f"Saved NASA POWER data to {output_path}")
+        return df
 
     except Exception as e:
         print("Error fetching data from NASA POWER API:")
         print(e)
+        return None
 
 # === Run this file directly to test ===
 if __name__ == "__main__":
