@@ -12,8 +12,6 @@ from backend.data.location_utils import get_user_location_from_ip
 from backend.model_training.model import SolarLSTM
 from backend.model_training.config import INPUT_SIZE, HIDDEN_SIZE, NUM_LAYERS, MODEL_SAVE_PATH
 
-# print("PYTHONPATH:", sys.path)
-
 st.set_page_config(page_title="SolarIQ", layout="wide")
 
 # --- Header ---
@@ -23,27 +21,23 @@ st.markdown("Predict tomorrow’s solar irradiance using NASA weather data and m
 # --- Sidebar for user input ---
 st.sidebar.header("📍 Location Settings")
 
-# Option 1: Auto-detect location
 use_auto_location = st.sidebar.checkbox("Auto-detect my location", value=True)
 
 if use_auto_location:
     location = get_user_location_from_ip()
     lat, lon = location
     st.sidebar.success(f"Detected Location: ({lat}, {lon})")
-
 else:
     lat = st.sidebar.number_input("Latitude", value=28.6139)
     lon = st.sidebar.number_input("Longitude", value=77.2090)
 
-# --- Fetch NASA weather data ---
+# --- Fetch Button ---
 if st.button("Fetch Weather Data"):
     with st.spinner("Fetching data from NASA POWER API..."):
-        # Get dates: past 365 days
         end_date = datetime.today().strftime("%Y%m%d")
         start_date = (datetime.today() - timedelta(days=365)).strftime("%Y%m%d")
-
         df = fetch_nasa_power_data(lat, lon, start_date, end_date)
-        # Clean invalid values before plotting
+
         df = df[
             (df['solar_irradiance'] != -999) &
             (df['temperature'] != -999) &
@@ -51,63 +45,63 @@ if st.button("Fetch Weather Data"):
         ]
 
         if df is not None and not df.empty:
-            st.success("✅ Data fetched successfully!")
-            st.dataframe(df.tail(7))
+            st.session_state['df'] = df
+        else:
+            st.error("Failed to fetch data. Please try again.")
 
-            # debug line
-            # st.write("Columns in dataframe:", df.columns.tolist())
-            
-            # --- Show plot ---
-            st.subheader("☀️ Historical Solar Irradiance")
-            fig, ax = plt.subplots(figsize=(10, 4))
-            ax.plot(df['solar_irradiance'].values, label='Irradiance', color='orange')
-            ax.set_ylabel("kWh/m²/day")
-            ax.set_xlabel("Days")
-            ax.grid(True)
-            st.pyplot(fig)
-            
-            # --- Prediction for Tomorrow ---
-            st.subheader("🔮 Tomorrow’s Solar Forecast")
+# --- Display if data exists ---
+if 'df' in st.session_state:
+    df = st.session_state['df']
+    st.success("✅ Data fetched successfully!")
+    st.dataframe(df.tail(7))
 
-            last_7_days = df.tail(7)[['solar_irradiance', 'temperature', 'humidity']].values
+    # --- Historical Plot ---
+    st.subheader("☀️ Historical Solar Irradiance")
+    fig, ax = plt.subplots(figsize=(10, 4))
+    ax.plot(df['solar_irradiance'].values, label='Irradiance', color='orange')
+    ax.set_ylabel("kWh/m²/day")
+    ax.set_xlabel("Days")
+    ax.grid(True)
+    st.pyplot(fig)
 
-            if last_7_days.shape == (7, 3):
-                sequence = torch.tensor(last_7_days, dtype=torch.float32).unsqueeze(0)  # Shape: (1, 7, 3)
-                model = SolarLSTM(input_size=INPUT_SIZE, hidden_size=HIDDEN_SIZE, num_layers=NUM_LAYERS)
-                model.load_state_dict(torch.load(MODEL_SAVE_PATH))
-                model.eval()
+    # --- Prediction ---
+    st.subheader("🔮 Tomorrow’s Solar Forecast")
+    last_7_days = df.tail(7)[['solar_irradiance', 'temperature', 'humidity']].values
 
-                with torch.no_grad():
-                    prediction = model(sequence).item()
-                    print(f"Prediction: {prediction}")
+    if last_7_days.shape == (7, 3):
+        sequence = torch.tensor(last_7_days, dtype=torch.float32).unsqueeze(0)
+        model = SolarLSTM(input_size=INPUT_SIZE, hidden_size=HIDDEN_SIZE, num_layers=NUM_LAYERS)
+        model.load_state_dict(torch.load(MODEL_SAVE_PATH))
+        model.eval()
 
-                st.success(f"Predicted Solar Irradiance for Tomorrow: **{prediction:.3f} kWh/m²/day**")
+        with torch.no_grad():
+            prediction = model(sequence).item()
+            st.session_state['prediction'] = prediction
+
+        st.success(f"Predicted Solar Irradiance for Tomorrow: **{prediction:.3f} kWh/m²/day**")
+    else:
+        st.warning("Insufficient data for prediction. Need 7 valid recent days.")
+
+    # --- Savings Calculator ---
+    st.subheader("💰 Solar Savings Calculator")
+    with st.form("savings_form"):
+        system_size = st.number_input("Solar system size (in kW)", min_value=0.1, value=3.0)
+        efficiency = st.slider("System efficiency (%)", min_value=10, max_value=100, value=80)
+        electricity_rate = st.number_input("Electricity rate ($/kWh)", min_value=1.0, value=6.0)
+        submitted = st.form_submit_button("Estimate Savings")
+
+    if submitted:
+        try:
+            if 'prediction' not in st.session_state:
+                st.warning("Please fetch prediction first.")
             else:
-                st.warning("Insufficient data for prediction. Need 7 valid recent days.")    
-                
-            
-            # --- Solar Savings Calculator ---
-            st.subheader("💰 Solar Savings Calculator")
-
-            with st.form("savings_form"):
-                system_size = st.number_input("Solar system size (in kW)", min_value=0.1, value=3.0)
-                efficiency = st.slider("System efficiency (%)", min_value=10, max_value=100, value=80)
-                electricity_rate = st.number_input("Electricity rate (₹/kWh)", min_value=1.0, value=6.0)
-                submitted = st.form_submit_button("Estimate Savings")
-
-            if submitted:
-                # Prediction already made above
-                predicted_irradiance = float(prediction)
-
-                # Calculation
+                predicted_irradiance = float(st.session_state['prediction'])
                 daily_energy_kwh = predicted_irradiance * system_size * (efficiency / 100)
                 estimated_savings = daily_energy_kwh * electricity_rate
 
                 st.success(
                     f"🔋 Estimated Solar Energy: **{daily_energy_kwh:.2f} kWh/day**\n"
-                    f"💸 Estimated Daily Savings: **₹{estimated_savings:.2f}**"
+                    f"💸 Estimated Daily Savings: **${estimated_savings:.2f}**"
                 )
-                    
-            
-        else:
-            st.error("Failed to fetch data. Please try again.")
+        except Exception as e:
+            st.error(f"Error: {e}")
