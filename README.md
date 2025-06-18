@@ -1,5 +1,7 @@
 ### 🌞 SolarIQ — ML-Powered Solar Forecasting App
 
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+
 > Forecast daily solar energy generation for your location using weather data from NASA and machine learning.
 
 ---
@@ -107,12 +109,13 @@ SolarIQ/
 │   ├── raw/              # Unprocessed NASA data
 │   └── processed/        # Cleaned & scaled CSVs
 ├── frontend/
-│   └── streamlit_app.py  # WIP UI for user interaction
+│   └── streamlit_app.py  # UI for user interaction
 ├── assets/
 │   └── solar_irradiance_plot.png
 │   └── inference_plot.png
 │   └── predictions.csv
 ├── requirements.txt
+├── LICENSE
 └── README.md
 ```
 
@@ -122,12 +125,12 @@ SolarIQ/
 
 * Python, Pandas, NumPy, scikit-learn
 * NASA POWER API, ipinfo.io (for geolocation)
-* PyTorch (planned for LSTM)
-* Streamlit (frontend - WIP)
+* PyTorch (LSTM model)
+* Streamlit (frontend)
 * GitHub, VS Code
 
 ---
-
+<!-- 
 ### Future Features
 
 * Real-time solar forecast from any global location
@@ -135,7 +138,7 @@ SolarIQ/
 * PDF or CSV energy reports
 * Live weather + satellite image integration
 
----
+--- -->
 
 ### Built by
 
