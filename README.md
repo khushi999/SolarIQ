@@ -1,3 +1,14 @@
+---
+title: "SolarIQ"
+emoji: "☀️"
+colorFrom: "yellow"
+colorTo: "orange"
+sdk: streamlit
+sdk_version: "1.32.0"
+app_file: app.py
+pinned: false
+---
+
 ### 🌞 SolarIQ — ML-Powered Solar Forecasting App
 
 🌐 [Live Demo](https://solar-iq.streamlit.app/)
