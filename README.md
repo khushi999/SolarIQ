@@ -1,7 +1,5 @@
 ### 🌞 SolarIQ — ML-Powered Solar Forecasting App
 
-![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
-
 > Forecast daily solar energy generation for your location using weather data from NASA and machine learning.
 
 ---
