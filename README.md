@@ -80,7 +80,7 @@ This plot illustrates how well the trained LSTM model is able to capture pattern
 
 - **Validation RMSE**: `0.1252`
 - **Validation MAE**: `0.0996`
-- **Predictions Exported To**: [`assets/predictions.csv`](assets/predictions.csv)
+<!-- - **Predictions Exported To**: [`assets/predictions.csv`](assets/predictions.csv) -->
 
 The RMSE score measures the average prediction error between actual and predicted irradiance values. A lower RMSE indicates better performance — and 0.1252 suggests our model is fairly accurate on unseen data.
 
