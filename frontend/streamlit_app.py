@@ -25,8 +25,13 @@ use_auto_location = st.sidebar.checkbox("Auto-detect my location", value=True)
 
 if use_auto_location:
     location = get_user_location_from_ip()
-    lat, lon = location
-    st.sidebar.success(f"Detected Location: ({lat}, {lon})")
+    if location is not None and len(location) == 3:
+        city, lat, lon = location
+    else:
+        city, lat, lon = "Unknown", 28.6139, 77.2090
+    
+    st.sidebar.success(f"📍 Detected Location: {city} ({lat:.2f}, {lon:.2f})")
+    st.markdown(f"🌐 Forecasting results for **{city}**, located at ({lat:.2f}, {lon:.2f})")
 else:
     lat = st.sidebar.number_input("Latitude", value=28.6139)
     lon = st.sidebar.number_input("Longitude", value=77.2090)

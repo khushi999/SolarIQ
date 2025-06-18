@@ -23,8 +23,8 @@ def get_user_location_from_ip():
         region = data.get("region", "Unknown")
         
         print(f"Datected Location: {city}, {region}, ({lat}, {lon})")
-        return lat, lon
+        return f"{city}", lat, lon
     
     except Exception as e:
         print(f"Could not determine location from IP. Please enter manually.Error: {e}")
-        return None, None
+        return "Unknown", 28.6139, 77.2090
