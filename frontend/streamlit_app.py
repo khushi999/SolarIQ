@@ -7,8 +7,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from datetime import datetime, timedelta
 import torch
+from streamlit_js_eval import streamlit_js_eval
 from backend.data.fetch_nasa_power import fetch_nasa_power_data
-from backend.data.location_utils import get_user_location_from_ip
+from backend.data.location_utils import get_user_location_from_browser
 from backend.model_training.model import SolarLSTM
 from backend.model_training.config import INPUT_SIZE, HIDDEN_SIZE, NUM_LAYERS, MODEL_SAVE_PATH
 
@@ -16,7 +17,7 @@ st.set_page_config(page_title="SolarIQ", layout="wide")
 
 # --- Header ---
 st.title("🔆 SolarIQ – Solar Energy Forecasting")
-st.markdown("Predict tomorrow’s solar irradiance using NASA weather data and machine learning.")
+st.markdown("Predict tomorrow's solar irradiance using NASA weather data and machine learning.")
 
 # --- Sidebar for user input ---
 st.sidebar.header("📍 Location Settings")
@@ -24,11 +25,25 @@ st.sidebar.header("📍 Location Settings")
 use_auto_location = st.sidebar.checkbox("Auto-detect my location", value=True)
 
 if use_auto_location:
-    location = get_user_location_from_ip()
-    if location is not None and len(location) == 3:
-        city, lat, lon = location
-    else:
-        city, lat, lon = "Unknown", 28.6139, 77.2090
+    # Get browser location
+    browser_location = streamlit_js_eval(
+        js_expressions="""
+        new Promise((resolve, reject) => {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (pos) => resolve({lat: pos.coords.latitude, lon: pos.coords.longitude}),
+                    (err) => resolve(null)
+                );
+            } else {
+                resolve(null);
+            }
+        })
+        """,
+        key="get_location"
+    )
+    
+    # Get location details using the browser location
+    city, lat, lon = get_user_location_from_browser(browser_location)
     
     st.sidebar.success(f"📍 Detected Location: {city} ({lat:.2f}, {lon:.2f})")
     st.markdown(f"🌐 Forecasting results for **{city}**, located at ({lat:.2f}, {lon:.2f})")
@@ -42,23 +57,26 @@ if st.button("Fetch Weather Data"):
         end_date = datetime.today().strftime("%Y%m%d")
         start_date = (datetime.today() - timedelta(days=365)).strftime("%Y%m%d")
         df = fetch_nasa_power_data(lat, lon, start_date, end_date)
+        
+        if df is not None:
+            df = df[
+                (df['solar_irradiance'] != -999) &
+                (df['temperature'] != -999) &
+                (df['humidity'] != -999)
+            ]
 
-        df = df[
-            (df['solar_irradiance'] != -999) &
-            (df['temperature'] != -999) &
-            (df['humidity'] != -999)
-        ]
-
-        if df is not None and not df.empty:
-            st.session_state['df'] = df
+            if not df.empty:
+                st.session_state['df'] = df
+                st.success("✅ Data fetched successfully!")
+                st.dataframe(df.tail(7))
+            else:
+                st.error("No valid data points found. Please try a different location or date range.")
         else:
             st.error("Failed to fetch data. Please try again.")
 
 # --- Display if data exists ---
 if 'df' in st.session_state:
     df = st.session_state['df']
-    st.success("✅ Data fetched successfully!")
-    st.dataframe(df.tail(7))
 
     # --- Historical Plot ---
     st.subheader("☀️ Historical Solar Irradiance")
@@ -70,7 +88,7 @@ if 'df' in st.session_state:
     st.pyplot(fig)
 
     # --- Prediction ---
-    st.subheader("🔮 Tomorrow’s Solar Forecast")
+    st.subheader("🔮 Tomorrow's Solar Forecast")
     last_7_days = df.tail(7)[['solar_irradiance', 'temperature', 'humidity']].values
 
     if last_7_days.shape == (7, 3):
