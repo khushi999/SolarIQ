@@ -11,7 +11,7 @@ pinned: false
 
 ### 🌞 SolarIQ — ML-Powered Solar Forecasting App
 
-🌐 [Live Demo](https://solar-iq.streamlit.app/)
+🌐 [Live Demo](https://solariq-kj.vercel.app/)
 
 
 
