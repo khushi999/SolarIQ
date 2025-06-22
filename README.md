@@ -3,17 +3,13 @@ title: "SolarIQ"
 emoji: "☀️"
 colorFrom: "yellow"
 colorTo: "orange"
-sdk: streamlit
-sdk_version: "1.32.0"
-app_file: app.py
+sdk: fastapi
 pinned: false
 ---
 
 ### 🌞 SolarIQ — ML-Powered Solar Forecasting App
 
-🌐 [Live Demo](https://solariq-kj.vercel.app/)
-
-
+🌐 [**Live Demo on Render**](https://solariq.onrender.com)
 
 > Forecast daily solar energy generation for your location using weather data from NASA and machine learning.
 
@@ -24,30 +20,30 @@ pinned: false
 **SolarIQ** is a climate tech product that uses global weather data and time series modeling to:
 
 * Predict next-day solar power output
-* Estimate cost savings based on system size and electricity rates *(coming soon)*
+* Estimate cost savings based on system size and electricity rates
 * Provide an easy-to-use interface for homeowners, solar agents, students, and researchers
 
-Originally based on Open Climate Fix's UK dataset, the project **pivoted to NASA POWER API** to allow **location-based, real-time forecasts** globally.
+The backend is a FastAPI application, and the model was trained using PyTorch. The app is deployed on Render.
 
 ---
 
 ### How It Works
 
 1. **Location Detection**
-   - Detects user location using IP (via ipinfo.io)
+   - Detects user location using IP (via ipinfo.io) or manual input.
 
 2. **Data**
-   - Fetches solar irradiance, temperature, and humidity using [NASA POWER API](https://power.larc.nasa.gov/)
+   - Fetches solar irradiance, temperature, and humidity using the [NASA POWER API](https://power.larc.nasa.gov/).
 
 3. **Processing**
-   - Cleans and scales the data
-   - Creates 7-day rolling input sequences for prediction
+   - Cleans and scales the data.
+   - Creates 7-day rolling input sequences for prediction.
 
 4. **Modeling**
-   - (Coming soon) Train an LSTM-based time series model
+   - A trained LSTM-based time series model predicts the next day's solar irradiance.
 
 5. **UI**
-   - (Coming soon) Streamlit interface where users input location/system size and get a forecast & savings estimate
+   - A modern web interface built with HTML, CSS, and JavaScript allows users to get a forecast and savings estimate.
 
 ---
 
@@ -70,14 +66,13 @@ Target (y): Day 8
 This method allows the model to learn from historical trends and patterns.
 ```
 ![Sequence Diagram](assets/sequence_diagram.png)
-Generated 358 such sequences from the cleaned NASA POWER dataset.
 
 ---
 
 ## Modeling
-   - Trains a multi-feature LSTM model using PyTorch
-   - Uses past 7 days of solar irradiance, temperature, and humidity
-   - Predicts the 8th day's irradiance
+   - Trains a multi-feature LSTM model using PyTorch.
+   - Uses past 7 days of solar irradiance, temperature, and humidity.
+   - Predicts the 8th day's irradiance.
 
 ---
 
@@ -95,9 +90,8 @@ This plot illustrates how well the trained LSTM model is able to capture pattern
 
 - **Validation RMSE**: `0.1252`
 - **Validation MAE**: `0.0996`
-<!-- - **Predictions Exported To**: [`assets/predictions.csv`](assets/predictions.csv) -->
 
-The RMSE score measures the average prediction error between actual and predicted irradiance values. A lower RMSE indicates better performance — and 0.1252 suggests our model is fairly accurate on unseen data.
+The RMSE score measures the average prediction error between actual and predicted irradiance values. A lower RMSE indicates better performance.
 
 ---
 
@@ -105,53 +99,30 @@ The RMSE score measures the average prediction error between actual and predicte
 
 ```
 SolarIQ/
-├── backend/
-│   ├── data/
-│   │   ├── fetch_nasa_power.py
-│   │   └── location_utils.py
-│   └── model_training/
-│       ├── clean_nasa_data.py
-│       └── create_sequences.py
-│       └── dataset.py
-│       └── load_data.py
-│       └── model.py
-│       └── train_loop.py
-│       └── utils.py
-│       └── config.py
-├── data/
-│   ├── raw/              # Unprocessed NASA data
-│   └── processed/        # Cleaned & scaled CSVs
-├── frontend/
-│   └── streamlit_app.py  # UI for user interaction
-├── assets/
-│   └── solar_irradiance_plot.png
-│   └── inference_plot.png
-│   └── predictions.csv
-├── requirements.txt
-├── LICENSE
-└── README.md
+├── main.py                 # FastAPI application
+├── requirements.txt        # Python dependencies
+├── render.yaml             # Render Blueprint
+├── templates/
+│   └── index.html          # Web interface
+├── static/
+│   └── style.css           # Additional styles
+├── models/
+│   └── solar_lstm.pth      # Trained model
+├── backend/                # Backend modules
+└── ...
 ```
 
 ---
 
 ### Tech Stack
 
-* Python, Pandas, NumPy, scikit-learn
-* NASA POWER API, ipinfo.io (for geolocation)
-* PyTorch (LSTM model)
-* Streamlit (frontend)
-* GitHub, VS Code
+* **Backend**: Python, FastAPI
+* **Frontend**: HTML, CSS, JavaScript, Bootstrap
+* **ML**: PyTorch, Pandas, NumPy
+* **APIs**: NASA POWER API, ipinfo.io
+* **Deployment**: Render, GitHub
 
 ---
-<!-- 
-### Future Features
-
-* Real-time solar forecast from any global location
-* Dollar savings calculator based on $/kWh
-* PDF or CSV energy reports
-* Live weather + satellite image integration
-
---- -->
 
 ### Built by
 
