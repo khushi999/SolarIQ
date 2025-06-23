@@ -2,6 +2,7 @@ from fastapi import FastAPI, Request, Form
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 import sys
 import os
@@ -20,18 +21,35 @@ from backend.model_training.config import INPUT_SIZE, HIDDEN_SIZE, NUM_LAYERS
 
 app = FastAPI(title="SolarIQ", description="ML-Powered Solar Forecasting App")
 
-# Mount static files
-app.mount("/static", StaticFiles(directory="static"), name="static")
+# --- CORS Middleware ---
+# This allows your frontend on Vercel to communicate with this backend on Render.
+origins = [
+    "https://solariq.onrender.com", # The frontend itself
+    "https://*.vercel.app",        # Allow any Vercel deployment
+    "http://localhost",
+    "http://localhost:8080",
+]
 
-# Templates
-templates = Jinja2Templates(directory="templates")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], # Allows all origins
+    allow_credentials=True,
+    allow_methods=["*"], # Allows all methods
+    allow_headers=["*"], # Allows all headers
+)
+
+# Mount static files (no longer needed for the primary frontend)
+# app.mount("/static", StaticFiles(directory="static"), name="static")
+
+# Templates (no longer needed for the primary frontend)
+# templates = Jinja2Templates(directory="templates")
 
 # Model path - adjust for Vercel deployment
 MODEL_SAVE_PATH = os.path.join(os.path.dirname(__file__), "models", "solar_lstm.pth")
 
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+    return {"message": "SolarIQ Backend is running. Frontend is hosted separately."}
 
 @app.post("/predict")
 async def predict_solar_irradiance(
