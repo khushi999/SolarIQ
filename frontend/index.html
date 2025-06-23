@@ -70,6 +70,10 @@
             padding: 10px 20px;
             margin: 10px 0;
         }
+        .loading p {
+            font-style: italic;
+            color: #6c757d;
+        }
     </style>
 </head>
 <body>
@@ -92,26 +96,26 @@
                         
                         <form id="predictionForm">
                             <div class="mb-3">
-                                <label for="lat" class="form-label">Latitude</label>
+                                <label for="lat" class="form-label">Latitude <i class="fas fa-question-circle" data-bs-toggle="tooltip" title="The north-south position of a point on the Earth's surface."></i></label>
                                 <input type="number" class="form-control" id="lat" name="lat" step="0.0001" value="28.6139" required>
                             </div>
                             <div class="mb-3">
-                                <label for="lon" class="form-label">Longitude</label>
+                                <label for="lon" class="form-label">Longitude <i class="fas fa-question-circle" data-bs-toggle="tooltip" title="The east-west position of a point on the Earth's surface."></i></label>
                                 <input type="number" class="form-control" id="lon" name="lon" step="0.0001" value="77.2090" required>
                             </div>
                             
                             <h5><i class="fas fa-calculator"></i> System Settings</h5>
                             <div class="mb-3">
-                                <label for="system_size" class="form-label">Solar System Size (kW)</label>
+                                <label for="system_size" class="form-label">Solar System Size (kW) <i class="fas fa-question-circle" data-bs-toggle="tooltip" title="The total power output of your solar panels. A typical home has a 3-6 kW system."></i></label>
                                 <input type="number" class="form-control" id="system_size" name="system_size" step="0.1" value="3.0" min="0.1" required>
                             </div>
                             <div class="mb-3">
-                                <label for="efficiency" class="form-label">System Efficiency (%)</label>
+                                <label for="efficiency" class="form-label">System Efficiency (%) <i class="fas fa-question-circle" data-bs-toggle="tooltip" title="How effectively your system converts sunlight to electricity, accounting for wiring, inverter, etc. Usually 80-90%."></i></label>
                                 <input type="range" class="form-range" id="efficiency" name="efficiency" min="10" max="100" value="80">
                                 <div class="text-center" id="efficiencyValue">80%</div>
                             </div>
                             <div class="mb-3">
-                                <label for="electricity_rate" class="form-label">Electricity Rate ($/kWh)</label>
+                                <label for="electricity_rate" class="form-label">Electricity Rate ($/kWh) <i class="fas fa-question-circle" data-bs-toggle="tooltip" title="The price you pay for electricity from your utility company."></i></label>
                                 <input type="number" class="form-control" id="electricity_rate" name="electricity_rate" step="0.1" value="6.0" min="0.1" required>
                             </div>
                             
@@ -127,19 +131,19 @@
                             <h4><i class="fas fa-chart-line"></i> Forecast Results</h4>
                             
                             <div class="result-card">
-                                <h5><i class="fas fa-sun"></i> Tomorrow's Solar Irradiance</h5>
+                                <h5><i class="fas fa-sun"></i> Tomorrow's Solar Irradiance <i class="fas fa-question-circle" data-bs-toggle="tooltip" title="The predicted amount of solar energy that will hit a square meter of the Earth's surface tomorrow."></i></h5>
                                 <h2 id="predictionValue" class="display-4">-</h2>
                                 <p class="mb-0">kWh/m²/day</p>
                             </div>
                             
                             <div class="result-card">
-                                <h5><i class="fas fa-bolt"></i> Energy Generation</h5>
+                                <h5><i class="fas fa-bolt"></i> Energy Generation <i class="fas fa-question-circle" data-bs-toggle="tooltip" title="The total electricity your specific solar system is estimated to generate tomorrow."></i></h5>
                                 <h3 id="energyValue" class="display-6">-</h3>
                                 <p class="mb-0">kWh/day</p>
                             </div>
                             
                             <div class="result-card">
-                                <h5><i class="fas fa-dollar-sign"></i> Daily Savings</h5>
+                                <h5><i class="fas fa-dollar-sign"></i> Daily Savings <i class="fas fa-question-circle" data-bs-toggle="tooltip" title="The estimated amount of money you'll save tomorrow by generating your own solar power."></i></h5>
                                 <h3 id="savingsValue" class="display-6">-</h3>
                                 <p class="mb-0">USD/day</p>
                             </div>
@@ -150,7 +154,7 @@
                             <div class="spinner-border text-primary" role="status">
                                 <span class="visually-hidden">Loading...</span>
                             </div>
-                            <p class="mt-3">Fetching weather data and generating forecast...</p>
+                            <p class="mt-3">Waking up the solar-powered servers... this may take a moment on the first request!</p>
                         </div>
                         
                         <!-- Error -->
@@ -170,6 +174,12 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+        // Initialize Bootstrap tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+          return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+
         // Update efficiency display
         document.getElementById('efficiency').addEventListener('input', function() {
             document.getElementById('efficiencyValue').textContent = this.value + '%';
