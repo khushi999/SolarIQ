@@ -180,6 +180,8 @@
           return new bootstrap.Tooltip(tooltipTriggerEl)
         })
 
+        let historicalChart; // Declare chart variable here
+
         // Update efficiency display
         document.getElementById('efficiency').addEventListener('input', function() {
             document.getElementById('efficiencyValue').textContent = this.value + '%';
@@ -257,11 +259,11 @@
             const ctx = document.getElementById('historicalChart').getContext('2d');
             
             // Destroy existing chart if it exists
-            if (window.historicalChart) {
-                window.historicalChart.destroy();
+            if (historicalChart) {
+                historicalChart.destroy();
             }
             
-            window.historicalChart = new Chart(ctx, {
+            historicalChart = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: Array.from({length: data.length}, (_, i) => `Day ${i + 1}`),
