@@ -9,7 +9,7 @@ pinned: false
 
 ### 🌞 SolarIQ — ML-Powered Solar Forecasting App
 
-🌐 [**Live Demo on Render**](https://solariq.onrender.com)
+🌐 [**Live Demo on Vercel**](https://solariq-hia5u3ngn-khushi-jains-projects-02216216.vercel.app/) (Frontend) | [**Live Backend on Render**](https://solariq.onrender.com/health)
 
 > Forecast daily solar energy generation for your location using weather data from NASA and machine learning.
 
@@ -120,7 +120,7 @@ SolarIQ/
 * **Frontend**: HTML, CSS, JavaScript, Bootstrap
 * **ML**: PyTorch, Pandas, NumPy
 * **APIs**: NASA POWER API, ipinfo.io
-* **Deployment**: Render, GitHub
+* **Deployment**: Vercel (Frontend), Render (Backend), GitHub
 
 ---
 

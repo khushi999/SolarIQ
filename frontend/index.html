@@ -90,32 +90,34 @@
                 <div class="row">
                     <div class="col-md-6">
                         <h4><i class="fas fa-map-marker-alt"></i> Location Settings</h4>
+                        <p class="form-text text-muted">Enter the coordinates for the location you want to forecast. Use the button for automatic detection.</p>
                         <button class="location-btn" onclick="getLocation()">
                             <i class="fas fa-crosshairs"></i> Auto-detect Location
                         </button>
                         
                         <form id="predictionForm">
                             <div class="mb-3">
-                                <label for="lat" class="form-label">Latitude <i class="fas fa-question-circle" data-bs-toggle="tooltip" title="The north-south position of a point on the Earth's surface."></i></label>
+                                <label for="lat" class="form-label">Latitude</label>
                                 <input type="number" class="form-control" id="lat" name="lat" step="0.0001" value="28.6139" required>
                             </div>
                             <div class="mb-3">
-                                <label for="lon" class="form-label">Longitude <i class="fas fa-question-circle" data-bs-toggle="tooltip" title="The east-west position of a point on the Earth's surface."></i></label>
+                                <label for="lon" class="form-label">Longitude</label>
                                 <input type="number" class="form-control" id="lon" name="lon" step="0.0001" value="77.2090" required>
                             </div>
                             
                             <h5><i class="fas fa-calculator"></i> System Settings</h5>
+                            <p class="form-text text-muted">Adjust the parameters to match your solar panel system for an accurate savings estimate.</p>
                             <div class="mb-3">
-                                <label for="system_size" class="form-label">Solar System Size (kW) <i class="fas fa-question-circle" data-bs-toggle="tooltip" title="The total power output of your solar panels. A typical home has a 3-6 kW system."></i></label>
+                                <label for="system_size" class="form-label">Solar System Size (kW)</label>
                                 <input type="number" class="form-control" id="system_size" name="system_size" step="0.1" value="3.0" min="0.1" required>
                             </div>
                             <div class="mb-3">
-                                <label for="efficiency" class="form-label">System Efficiency (%) <i class="fas fa-question-circle" data-bs-toggle="tooltip" title="How effectively your system converts sunlight to electricity, accounting for wiring, inverter, etc. Usually 80-90%."></i></label>
+                                <label for="efficiency" class="form-label">System Efficiency (%)</label>
                                 <input type="range" class="form-range" id="efficiency" name="efficiency" min="10" max="100" value="80">
                                 <div class="text-center" id="efficiencyValue">80%</div>
                             </div>
                             <div class="mb-3">
-                                <label for="electricity_rate" class="form-label">Electricity Rate ($/kWh) <i class="fas fa-question-circle" data-bs-toggle="tooltip" title="The price you pay for electricity from your utility company."></i></label>
+                                <label for="electricity_rate" class="form-label">Electricity Rate ($/kWh)</label>
                                 <input type="number" class="form-control" id="electricity_rate" name="electricity_rate" step="0.1" value="6.0" min="0.1" required>
                             </div>
                             
@@ -129,21 +131,22 @@
                         <!-- Results Section -->
                         <div id="results" style="display: none;">
                             <h4><i class="fas fa-chart-line"></i> Forecast Results</h4>
+                            <p class="form-text text-muted">Here are the predictions for tomorrow based on your location and system settings.</p>
                             
                             <div class="result-card">
-                                <h5><i class="fas fa-sun"></i> Tomorrow's Solar Irradiance <i class="fas fa-question-circle" data-bs-toggle="tooltip" title="The predicted amount of solar energy that will hit a square meter of the Earth's surface tomorrow."></i></h5>
+                                <h5><i class="fas fa-sun"></i> Tomorrow's Solar Irradiance</h5>
                                 <h2 id="predictionValue" class="display-4">-</h2>
                                 <p class="mb-0">kWh/m²/day</p>
                             </div>
                             
                             <div class="result-card">
-                                <h5><i class="fas fa-bolt"></i> Energy Generation <i class="fas fa-question-circle" data-bs-toggle="tooltip" title="The total electricity your specific solar system is estimated to generate tomorrow."></i></h5>
+                                <h5><i class="fas fa-bolt"></i> Energy Generation</h5>
                                 <h3 id="energyValue" class="display-6">-</h3>
                                 <p class="mb-0">kWh/day</p>
                             </div>
                             
                             <div class="result-card">
-                                <h5><i class="fas fa-dollar-sign"></i> Daily Savings <i class="fas fa-question-circle" data-bs-toggle="tooltip" title="The estimated amount of money you'll save tomorrow by generating your own solar power."></i></h5>
+                                <h5><i class="fas fa-dollar-sign"></i> Daily Savings</h5>
                                 <h3 id="savingsValue" class="display-6">-</h3>
                                 <p class="mb-0">USD/day</p>
                             </div>
@@ -165,6 +168,7 @@
                 <!-- Historical Chart -->
                 <div id="chartContainer" class="chart-container" style="display: none;">
                     <h4><i class="fas fa-chart-area"></i> Historical Solar Irradiance (Last 30 Days)</h4>
+                    <p class="form-text text-muted">This chart shows the actual solar energy recorded for your location over the past 30 days.</p>
                     <canvas id="historicalChart" width="400" height="200"></canvas>
                 </div>
             </div>
